@@ -6,6 +6,8 @@ node_modules/
 .env.local
 .env.*.local
 
+/uploads
+
 # Игнорирование логов и кэша
 logs/
 *.log

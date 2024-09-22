@@ -9,7 +9,7 @@ export class AppController {
 
   @MessagePattern({ cmd: "REG" }, Transport.TCP)
   async registration({userDto, profile_image}) {
-      return this.appService.registration(userDto, profile_image)
+      return await this.appService.registration(userDto, profile_image)
   }  
 
   @MessagePattern({ cmd: "LOGIN" }, Transport.TCP)
@@ -17,8 +17,8 @@ export class AppController {
       return await this.appService.login(userDto);
   }
 
-  @MessagePattern({cmd: 'VERIFY_EMAIL'})
+  @MessagePattern({cmd: 'VERIFY_EMAIL'}, Transport.TCP)
   async verifyEmail(token: string) {
-    return this.appService.verifyEmail(token)
+    return await this.appService.verifyEmail(token)
   }
 }

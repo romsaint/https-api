@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { ValidationPipe } from '@nestjs/common';
+import { Injectable, ValidationPipe } from '@nestjs/common';
 import { ErrorLogService } from './log/log.service';
 import { Logger } from 'nestjs-pino';
 import { AllExceptionsFilter } from './common/filters/error.filter';
 import * as fs from 'fs'
+import { AppClusterService } from './cluster/cluster.service';
 
 
 async function bootstrap() {
@@ -23,7 +24,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionsFilter(errorLlog))
 
-  await app.listen(3000);
+  await app.listen(3000, '127.0.0.1');
 }
 
-bootstrap();
+AppClusterService.clusterize(bootstrap)

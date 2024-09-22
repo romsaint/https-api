@@ -10,6 +10,7 @@ import { ErrorLogService } from './log/log.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOpt } from './common/constants/multer.constants';
 import { LoggerModule } from 'nestjs-pino';
+import { AppClusterService } from './cluster/cluster.service';
 
 
 @Module({
@@ -44,7 +45,7 @@ import { LoggerModule } from 'nestjs-pino';
   LogModule
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService, ErrorLogService],
+  providers: [AppService, JwtService, ErrorLogService, AppClusterService],
 })
 
 export class AppModule { }

@@ -29,8 +29,8 @@ export class AppService {
   async allUsers(limit: number, offset: number): Promise<IReturnUser[]> {
     try {
       const redisUsers = await this.redisService.get('users');
+
       if (redisUsers) {
-        await this.redisService.del('users');
         return JSON.parse(redisUsers);
       }
 
@@ -50,6 +50,7 @@ export class AppService {
       });
 
       await this.redisService.set('users', JSON.stringify(users));
+      
       return users;
     } catch (e) {
       throw new RpcException(e.message || 'Error fetching users');

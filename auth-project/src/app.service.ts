@@ -54,14 +54,14 @@ export class AppService {
 
       const token = this.jwt.sign(userCreate, { secret: this.config.get('SECRET_KEY') });
 
-      const confirmationLink = `https://127.0.0.1:3000/verify-email/${uuidV4}?token=${token}`
+      const confirmationLink = `https://127.0.0.1:3000/auth/verify-email/${uuidV4}?token=${token}`
       const htmlContent = generateHtmlContent(userCreate.username, confirmationLink);
 
       await this.mailService.sendEmail(userCreate.email, 'Confirm your email', htmlContent)
 
       return { confirmationLink, email: userCreate.email, username: userCreate.username };
     } catch (e) {
-      throw new RpcException(e.message)
+      throw new RpcException(e.message || 'Server error :(')
     }
   }
 
@@ -87,7 +87,7 @@ export class AppService {
 
       return { userWithoutPassword, token }
     } catch (e) {
-      throw new RpcException(e.message)
+      throw new RpcException(e.message || 'Server error :(')
     }
   }
 
@@ -100,7 +100,7 @@ export class AppService {
 
       return {msg: "Successfully!"}
     } catch (e) {
-      throw new RpcException("User already exists! DON'T CLICK f5")
+      throw new RpcException("User already exists!")
     }
   }
 }

@@ -13,30 +13,30 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @Post('registration')
+  @Post('auth/registration')
   @UseInterceptors(FileInterceptor('avatar'))
   async registration(@Body() userDto: UserCreateDto, @UploadedFile() profile_image) {
     return await this.appService.registration(userDto, profile_image);
   }
 
-  @Post('login')
+  @Post('auth/login')
   async login(@Body() userDto: Omit<UserCreateDto, 'username'>) {
     return this.appService.login(userDto)
   }
 
-  @Get('generate-user')
+  @Get('user/generate-user')
   @UseGuards(RolesGuard, JwtGuard)
   generateUser(@Query('count') count: number) {
     return this.appService.generateUser(count)
   }
 
 
-  @Get('verify-email/:uuid')
+  @Get('auth/verify-email/:uuid')
   async verifyEmail(@Query('token') token: string) {
     return this.appService.verifyEmail(token)
   }
 
-  @Get('all-users')
+  @Get('user/all-users')
   @RolesReflector(UserRoles.MODERATOR)
   @UseGuards(RolesGuard, JwtGuard)
   async allUsers(
