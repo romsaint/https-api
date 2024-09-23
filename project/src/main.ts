@@ -24,7 +24,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionsFilter(errorLlog))
 
-  await app.listen(3000, '127.0.0.1');
+  await app.listen(5000, '127.0.0.1');
 }
 
 AppClusterService.clusterize(bootstrap)

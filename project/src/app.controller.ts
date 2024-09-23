@@ -24,6 +24,7 @@ export class AppController {
     return this.appService.login(userDto)
   }
 
+
   @Get('user/generate-user')
   @UseGuards(RolesGuard, JwtGuard)
   generateUser(@Query('count') count: number) {

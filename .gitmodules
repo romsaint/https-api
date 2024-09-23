@@ -1,0 +1,6 @@
+[submodule "load-balancing-microservices/service-1/https-api"]
+	path = load-balancing-microservices/service-1/https-api
+	url = git@github.com:romsaint/https-api.git
+[submodule "load-balancing-microservices/service-2/https-api"]
+	path = load-balancing-microservices/service-2/https-api
+	url = git@github.com:romsaint/https-api.git
