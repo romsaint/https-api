@@ -18,7 +18,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
         },
       },
       defaults: {
-        from: `"Nest rem project" <${process.env.MAIL_USER}>`, // Убедитесь, что этот адрес совпадает с адресом аутентификации
+        from: `"Nest https-api project" <${process.env.MAIL_USER}>`, // Убедитесь, что этот адрес совпадает с адресом аутентификации
       },
     }),
   ],

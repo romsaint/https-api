@@ -40,3 +40,9 @@ model Log {
   message   String
   timestamp DateTime @default(now())
 }
+
+model Tokens {
+  id    Int   @id   @default(autoincrement())
+  ip    String  @unique // IP type
+  jwt_token   String
+}

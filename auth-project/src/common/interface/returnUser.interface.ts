@@ -1,6 +1,6 @@
 import { UserRoles } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
-import { UserDto } from "src/user-project-dto/user.dto";
+import { UserDto } from "src/dto/user.dto";
 
 export interface IReturnUser{
     username: string

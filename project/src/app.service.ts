@@ -1,10 +1,14 @@
-import { ExecutionContext, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { ExecutionContext, HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
 import {Cron, CronExpression} from '@nestjs/schedule'
 import { IReturnUser } from './common/interface/returnUser.interface';
 import { IAppService } from './common/interface/appService.interface';
+import axios from 'axios'
+import { Request } from 'express';
+import * as fs from 'fs'
+import * as https from 'https';
 
 @Injectable()
 export class AppService implements IAppService{
@@ -33,8 +37,8 @@ export class AppService implements IAppService{
     }))
   }
 
-  async verifyEmail(token: string): Promise<Observable<{msg: string}>> {
-    return this.authClient.send({cmd: "VERIFY_EMAIL"}, token).pipe(catchError(err => {
+  async verifyEmail(ip, token: string): Promise<Observable<{msg: string}>> {
+    return this.authClient.send({cmd: "VERIFY_EMAIL"}, {ip, token}).pipe(catchError(err => {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     }))
   }
@@ -47,6 +51,32 @@ export class AppService implements IAppService{
       return data
     }catch(e) {
       throw new RpcException(e.message || "All users error")
+    }
+  }
+
+  async sendEmail(ip) {
+    if(ip) {
+      await this.authClient.emit({cmd: "SEND_EMAIL"}, ip)
+
+      return 
+    }
+  
+    throw new UnauthorizedException()
+  }
+
+  async sendEmailCron() {
+    try{
+      const httpsAgent = new https.Agent({
+        cert: fs.readFileSync('./src/secrets/cert.pem'),
+        key: fs.readFileSync('./src/secrets/key.pem'),
+        rejectUnauthorized: false,
+      });
+      
+      await axios.get('https://127.0.0.1:5000/send-email', {
+        httpsAgent: httpsAgent,
+      });
+    }catch(e){
+      throw new Error(e)
     }
   }
 }

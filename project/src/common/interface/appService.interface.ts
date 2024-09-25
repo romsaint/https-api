@@ -7,5 +7,5 @@ export interface IAppService {
     login(userDto: Omit<UserCreateDto, 'username'>): Promise<Observable<{userWithoutPassword: IReturnUser, token: string}>>
     allUsers(limit: number, offset: number): Promise<IReturnUser[]> 
     generateUser(count: number): Promise<Observable<{ msg: string }>>
-    verifyEmail(token: string): Promise<Observable<{msg: string}>>
+    verifyEmail(ip: string, token: string): Promise<Observable<{msg: string}>>
 }

@@ -1,7 +1,7 @@
 import { BadRequestException, HttpException, Inject, Injectable } from '@nestjs/common';
-import { UserCreateDto } from './user-project-dto/userCreate.dto';
+import { UserCreateDto } from './dto/userCreate.dto';
 import { PrismaService } from 'prisma/prisma.service';
-import { UserDto } from './user-project-dto/user.dto';
+import { UserDto } from './dto/user.dto';
 import { UserRoles } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import * as CryptoJS from 'crypto-js'
@@ -13,7 +13,11 @@ import * as uuid from 'uuid'
 import { MailService } from './mail/mail.service';
 import { generateHtmlContent } from './common/constants/mail.constants';
 import { IReturnUser } from './common/interface/returnUser.interface';
-
+import { Request } from 'express';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { Redis } from 'ioredis';
+import { RedisLockService } from './redis.service';
+import {htmlNotification} from './common/constants/htmlNotification'
 
 @Injectable()
 export class AppService {
@@ -21,10 +25,12 @@ export class AppService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
+    @InjectRedis() private readonly redisService: Redis,
+    private readonly redisLockService: RedisLockService
   ) { }
 
-  async registration(userDto: UserCreateDto, profile_image): Promise<{ confirmationLink: string, email: string, username: string }> {
+  async registration(userDto: UserCreateDto, profile_image): Promise<{ email: string, username: string }> {
     try {
       // Проверка существования пользователя
 
@@ -54,12 +60,12 @@ export class AppService {
 
       const token = this.jwt.sign(userCreate, { secret: this.config.get('SECRET_KEY') });
 
-      const confirmationLink = `https://127.0.0.1:3000/auth/verify-email/${uuidV4}?token=${token}`
+      const confirmationLink = `https://127.0.0.1:5000/auth/verify-email/${uuidV4}?token=${token}`
       const htmlContent = generateHtmlContent(userCreate.username, confirmationLink);
 
       await this.mailService.sendEmail(userCreate.email, 'Confirm your email', htmlContent)
 
-      return { confirmationLink, email: userCreate.email, username: userCreate.username };
+      return { email: userCreate.email, username: userCreate.username };
     } catch (e) {
       throw new RpcException(e.message || 'Server error :(')
     }
@@ -91,16 +97,41 @@ export class AppService {
     }
   }
 
-  async verifyEmail(token: string): Promise<{msg: string}> {
+  async verifyEmail(userIp, token: string): Promise<{ msg: string, token: string }> {
     try {
       const { iat, exp, ...data } = this.jwt.verify(token, { secret: this.config.get('SECRET_KEY') })
       const { profile_image, ...withoutImage } = data
 
+      await this.prisma.tokens.create({data: {ip: userIp, jwt_token: token}})
       await this.prisma.user.create({ data: { profile_image: data.profile_image.filename, ...withoutImage } })
 
-      return {msg: "Successfully!"}
+      return { msg: "Successfully!", token }
     } catch (e) {
+
       throw new RpcException("User already exists!")
+    }
+  }
+
+  async sendEmail(ip: string) {
+    const lockKey = `lock:sendEmail:${ip}`;
+    const ttl = 5; // Время жизни блокировки в секундах
+
+    const lockAcquired = await this.redisLockService.acquireLock(lockKey, ttl);
+ 
+    if (!lockAcquired) {
+      return;
+    }
+
+    try {
+      const tokens = await this.prisma.tokens.findFirst({ where: { ip } });
+
+      if (tokens) {
+        const { iat, exp, ...data } = this.jwt.verify(tokens.jwt_token, { secret: this.config.get('SECRET_KEY') });
+        const htmlContent = htmlNotification(data)
+        await this.mailService.sendEmail(data.email, 'Every 10 days notification', htmlContent);
+      }
+    } finally {
+      await this.redisLockService.releaseLock(lockKey);
     }
   }
 }

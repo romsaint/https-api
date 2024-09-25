@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Ip, Param, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { JwtGuard } from './guards/verify.guard';
@@ -6,6 +6,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { RolesReflector } from './common/roles.reflector';
 import { UserRoles } from './common/userRoles';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 
 
 @Controller()
@@ -33,8 +34,8 @@ export class AppController {
 
 
   @Get('auth/verify-email/:uuid')
-  async verifyEmail(@Query('token') token: string) {
-    return this.appService.verifyEmail(token)
+  async verifyEmail(@Ip() ip, @Query('token') token: string) {
+    return this.appService.verifyEmail(ip, token)
   }
 
   @Get('user/all-users')
@@ -45,5 +46,15 @@ export class AppController {
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset) {
       
     return this.appService.allUsers(limit, offset)
+  }
+
+  @Get('send-email')
+  async sendEmail(@Ip() ip) {
+    await this.appService.sendEmail(ip)
+  }
+
+  @Cron('0 0 */10 * *')
+  async sendEmailCron() {
+    await this.appService.sendEmailCron()
   }
 }

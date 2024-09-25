@@ -11,7 +11,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { multerOpt } from './common/constants/multer.constants';
 import { LoggerModule } from 'nestjs-pino';
 import { AppClusterService } from './cluster/cluster.service';
-
+import {BullModule} from '@nestjs/bull'
 
 @Module({
   imports: [
@@ -42,7 +42,13 @@ import { AppClusterService } from './cluster/cluster.service';
   LoggerModule.forRoot({pinoHttp: {
     level: 'error',
   }}),
-  LogModule
+  LogModule,
+  BullModule.forRoot({
+    redis: {
+      host: 'localhost',
+      port: 6379
+    }
+  })
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, ErrorLogService, AppClusterService],

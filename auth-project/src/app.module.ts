@@ -11,8 +11,8 @@ import { MailService } from './mail/mail.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerOpt } from './common/constants/multer.constants';
 import { jwtOpt } from './common/constants/jwt.constants';
-
-
+import {RedisModule} from '@liaoliaots/nestjs-redis';
+import { RedisLockService } from './redis.service';
 
 @Module({
   imports: [
@@ -20,9 +20,15 @@ import { jwtOpt } from './common/constants/jwt.constants';
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    MailModule
+    MailModule,
+    RedisModule.forRoot({
+      config: {
+        host: 'localhost',
+        port: 6379
+      }
+    })
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, MailService],
+  providers: [AppService, PrismaService, MailService, RedisLockService],
 })
 export class AuthModule { }
