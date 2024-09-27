@@ -12,6 +12,7 @@ import { multerOpt } from './common/constants/multer.constants';
 import { LoggerModule } from 'nestjs-pino';
 import { AppClusterService } from './cluster/cluster.service';
 import {BullModule} from '@nestjs/bull'
+import { GoogleAuthModule } from './google-auth/google-auth.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import {BullModule} from '@nestjs/bull'
       host: 'localhost',
       port: 6379
     }
-  })
+  }),
+  GoogleAuthModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, ErrorLogService, AppClusterService],

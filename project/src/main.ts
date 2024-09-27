@@ -7,6 +7,7 @@ import { Logger } from 'nestjs-pino';
 import { AllExceptionsFilter } from './common/filters/error.filter';
 import * as fs from 'fs'
 import { AppClusterService } from './cluster/cluster.service';
+import { logLevel } from '@nestjs/microservices/external/kafka.interface';
 
 
 async function bootstrap() {
@@ -22,6 +23,7 @@ async function bootstrap() {
 
   const errorLlog = app.get(ErrorLogService)
 
+  // app.useLogger(['error'])
   app.useGlobalFilters(new AllExceptionsFilter(errorLlog))
 
   await app.listen(5000, '127.0.0.1');

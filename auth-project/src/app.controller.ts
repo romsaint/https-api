@@ -1,9 +1,10 @@
-import { Controller, Get, HttpException, HttpStatus, Post, Query, Req, UploadedFile } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Post, Query, Req, UploadedFile, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { EventPattern, MessagePattern, RpcException, Transport } from '@nestjs/microservices';
 import { Request } from 'express';
 import { IPVersion } from 'net';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AppController {
@@ -27,5 +28,10 @@ export class AppController {
   @EventPattern({cmd: "SEND_EMAIL"}, Transport.TCP)
   async sendMail(ip) {
     await this.appService.sendEmail(ip)
+  }
+
+  @MessagePattern({cmd: "CREATE_OAUTH_USER"}, Transport.TCP)
+  async createOAuthUser(profile) {
+    return await this.appService.createOAuthUser(profile)
   }
 }

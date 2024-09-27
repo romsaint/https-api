@@ -7,6 +7,7 @@ import { RolesReflector } from './common/roles.reflector';
 import { UserRoles } from './common/userRoles';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller()
@@ -25,19 +26,22 @@ export class AppController {
     return this.appService.login(userDto)
   }
 
-
-  @Get('user/generate-user')
-  @UseGuards(RolesGuard, JwtGuard)
-  generateUser(@Query('count') count: number) {
-    return this.appService.generateUser(count)
-  }
-
-
   @Get('auth/verify-email/:uuid')
   async verifyEmail(@Ip() ip, @Query('token') token: string) {
     return this.appService.verifyEmail(ip, token)
   }
 
+  @Get('auth/oauth')
+  @UseGuards(AuthGuard('google'))
+  async googleOAuth(@Req() req) {}
+
+  @Get('auth/oauth/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleOAuthRediect(@Req() req) {
+    return req.user
+  }
+
+  //     ---------  USER     ------------
   @Get('user/all-users')
   @RolesReflector(UserRoles.MODERATOR)
   @UseGuards(RolesGuard, JwtGuard)
@@ -48,6 +52,13 @@ export class AppController {
     return this.appService.allUsers(limit, offset)
   }
 
+  @Get('user/generate-user')
+  @UseGuards(RolesGuard, JwtGuard)
+  generateUser(@Query('count') count: number) {
+    return this.appService.generateUser(count)
+  }
+
+
   @Get('send-email')
   async sendEmail(@Ip() ip) {
     await this.appService.sendEmail(ip)
@@ -57,4 +68,7 @@ export class AppController {
   async sendEmailCron() {
     await this.appService.sendEmailCron()
   }
+
+
+  
 }

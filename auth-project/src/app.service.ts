@@ -17,7 +17,8 @@ import { Request } from 'express';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
 import { RedisLockService } from './redis.service';
-import {htmlNotification} from './common/constants/htmlNotification'
+import { htmlNotification } from './common/constants/htmlNotification'
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class AppService {
@@ -102,7 +103,7 @@ export class AppService {
       const { iat, exp, ...data } = this.jwt.verify(token, { secret: this.config.get('SECRET_KEY') })
       const { profile_image, ...withoutImage } = data
 
-      await this.prisma.tokens.create({data: {ip: userIp, jwt_token: token}})
+      await this.prisma.tokens.create({ data: { ip: userIp, jwt_token: token } })
       await this.prisma.user.create({ data: { profile_image: data.profile_image.filename, ...withoutImage } })
 
       return { msg: "Successfully!", token }
@@ -117,7 +118,7 @@ export class AppService {
     const ttl = 5; // Время жизни блокировки в секундах
 
     const lockAcquired = await this.redisLockService.acquireLock(lockKey, ttl);
- 
+
     if (!lockAcquired) {
       return;
     }
@@ -133,5 +134,61 @@ export class AppService {
     } finally {
       await this.redisLockService.releaseLock(lockKey);
     }
+  }
+
+  async validateOAuth(profile) {
+
+    const user = {
+      email: profile.emails[0].value,
+      username: profile.name.givenName,
+      profile_image: profile.photos[0].value,
+      role: UserRoles.DEFAULT_USER
+    };
+
+    return user
+  }
+
+  async createOAuthUser(profile) {
+    try{
+    const mySalt = CryptoJS.lib.WordArray.random(32).toString(); // Генерация случайной соли
+    const randomStr = faker.word.words({count: 15})
+    
+    let arr = randomStr.split(' ')
+
+    let password = ''
+
+    for(let i = 0; i < randomStr.length; i++) {
+      if(arr[i]) {
+        password += arr[i][0]
+      }
+      
+    }
+
+    console.log(password)
+
+    const hashedPassword = CryptoJS.PBKDF2(password, mySalt, {
+      keySize: 16, // 16 * 32 бит = 512 бит (64 байта)
+      iterations: 1000,
+    }).toString();
+
+    const user = {
+      username: profile.name, 
+      email: profile.email, 
+      password: hashedPassword, 
+      role: UserRoles.DEFAULT_USER, 
+      profile_image: profile.picture,
+      salt: mySalt
+    }
+
+    await this.prisma.user.create({data: user})
+
+    return user
+  }catch(e) {
+    if(e.code === 'P2002') {
+      throw new RpcException('User already exists')
+    }else{
+      throw new RpcException(e.message)
+    }
+  }
   }
 }

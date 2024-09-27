@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
 import { MulterModule } from '@nestjs/platform-express';
@@ -29,6 +29,6 @@ import { RedisLockService } from './redis.service';
     })
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, MailService, RedisLockService],
+  providers: [AppService, PrismaService, MailService, RedisLockService, ConfigService],
 })
 export class AuthModule { }
