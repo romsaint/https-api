@@ -1,23 +1,27 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { UserService } from './services/user.service';
+import { LogService } from './services/log.service';
 import { EventPattern, MessagePattern, Transport } from '@nestjs/microservices';
 
 @Controller('user')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly logService: LogService
+  ) {}
 
   @MessagePattern({cmd: "GENERATE_USER"}, Transport.TCP)
   async generaeteUser(count: number) {
-    return await this.appService.generateUsers(count)
+    return await this.userService.generateUsers(count)
   }
 
   @MessagePattern({cmd: "ALL_USERS"}, Transport.TCP)
   async allUsers(data: {limit: number, offset: number}) {
-    return await this.appService.allUsers(data.limit, data.offset)
+    return await this.userService.allUsers(data.limit, data.offset)
   }
 
   @EventPattern({cmd: "SAVE_LOG"}, Transport.TCP)
-  async saveLog({message, level}) {
-    await this.appService.saveLog(message, level)  
+  async saveLog({level, url, message}) {
+    await this.logService.saveLog(message, level, url)  
   }
 }

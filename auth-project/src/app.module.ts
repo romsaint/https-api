@@ -2,7 +2,6 @@ import { config } from 'dotenv'
 config()
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'prisma/prisma.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -12,7 +11,9 @@ import { MulterModule } from '@nestjs/platform-express';
 import { multerOpt } from './common/constants/multer.constants';
 import { jwtOpt } from './common/constants/jwt.constants';
 import {RedisModule} from '@liaoliaots/nestjs-redis';
-import { RedisLockService } from './redis.service';
+import { AuthService } from './services/auth.service';
+import { EmailService } from './services/email.service';
+import { AppService } from './services/app.service';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { RedisLockService } from './redis.service';
     })
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, MailService, RedisLockService, ConfigService],
+  providers: [AuthService, EmailService, PrismaService, MailService, ConfigService, AppService],
 })
 export class AuthModule { }

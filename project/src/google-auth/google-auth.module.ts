@@ -1,33 +1,43 @@
 import { Module } from '@nestjs/common';
 import { GoogleServiceStrategy } from './google-auth.service';
-import { AppService } from 'src/app.service';
+import { AppService } from 'src/services/app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AuthService } from 'src/services/auth.service';
+import { UsersService } from 'src/services/users.service';
+import { UtilityService } from 'src/services/utility.service';
 
 @Module({
   imports: [
     ClientsModule.register({
-    clients: [
-      {
-        name: "AUTH_SERVICE",
-        transport: Transport.TCP,
-        options: {
-          port: 3001
-        }
-      },
+      clients: [
+        {
+          name: "AUTH_SERVICE",
+          transport: Transport.TCP,
+          options: {
+            port: 3001
+          }
+        },
 
-      {
-        name: "USER_SERVICE",
-        transport: Transport.TCP,
-        options: {
-          port: 3002
+        {
+          name: "USER_SERVICE",
+          transport: Transport.TCP,
+          options: {
+            port: 3002
+          }
+        },
+        {
+          name: "UTILITY_SERVICE",
+          transport: Transport.TCP,
+          options: {
+            port: 3003
+          }
         }
-      },
-    ]
-  }),
-  ConfigModule.forRoot()
-]
+      ]
+    }),
+    ConfigModule.forRoot()
+  ]
   ,
-  providers: [GoogleServiceStrategy, AppService, ConfigService]
+  providers: [GoogleServiceStrategy, AppService, ConfigService, AuthService, UsersService, UtilityService]
 })
-export class GoogleAuthModule {}
+export class GoogleAuthModule { }

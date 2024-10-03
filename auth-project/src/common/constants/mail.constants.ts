@@ -37,6 +37,7 @@ export const generateHtmlContent = (name: string, confirmationLink: string): str
   </head>
   <body>
       <div class="container">
+        <img src="https://sunsetbosphorus.com/wp-content/uploads/2016/06/shutterstock_254090041.jpg" alt="Avatar" style="display: block; margin: 0 auto; width: 100px; height: 100px; border-radius: 50%;">
           <h1>Hello, ${name}!</h1>
           <p>Thank you for signing up. Please confirm your email address by clicking the link below:</p>
           <a href="${confirmationLink}" class="button">Confirm Email</a>

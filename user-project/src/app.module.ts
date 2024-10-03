@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UserService } from './services/user.service';
+import { LogService } from './services/log.service';
 import { PrismaService } from 'prisma/prisma.service';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 
@@ -12,6 +13,6 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
     }
   })],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [LogService, UserService, PrismaService],
 })
 export class AppModule {}

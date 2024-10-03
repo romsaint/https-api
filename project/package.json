@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^3.0.3",
     "@nestjs/bull": "^10.2.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -29,6 +30,8 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.4.3",
     "@nestjs/schedule": "^4.1.1",
+    "@nestjs/serve-static": "^4.0.2",
+    "@nestjs/terminus": "^10.2.3",
     "@prisma/client": "^5.19.1",
     "@types/bull": "^4.10.0",
     "@types/multer": "^1.4.12",
@@ -36,7 +39,9 @@
     "bull": "^4.16.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "create-react-app": "^5.0.1",
     "dotenv": "^16.4.5",
+    "handlebars": "^4.7.8",
     "https": "^1.0.0",
     "multer": "^1.4.5-lts.1",
     "nestjs-pino": "^4.1.0",

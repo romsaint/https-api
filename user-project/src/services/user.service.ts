@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { generateUser } from './common/utils/userGenerate';
+import { PrismaService } from '../../prisma/prisma.service';
+import { generateUser } from '../common/utils/userGenerate';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
-import { UserDto } from './dto/user.dto';
-import { IReturnUser } from './common/interface/returnUser.interface';
+import { UserDto } from '../dto/user.dto';
+import { IReturnUser } from '../common/interface/returnUser.interface';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
-export class AppService {
+export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     @InjectRedis() private readonly redisService: Redis
@@ -18,7 +18,7 @@ export class AppService {
     try {
       for (let i = 0; i < count; i++) {
         const user = generateUser();
-        await this.prisma.user.create({ data: user });
+        await this.prisma.users.create({ data: user });
       }
       return { msg: 'Created' };
     } catch (e) {
@@ -34,7 +34,7 @@ export class AppService {
         return JSON.parse(redisUsers);
       }
 
-      const users = await this.prisma.user.findMany({
+      const users = await this.prisma.users.findMany({
         select: {
           created_at: true,
           email: true,
@@ -45,8 +45,8 @@ export class AppService {
           username: true,
           profile_image: true,
         },
-        take: limit ?? 9999999999,
-        skip: offset ?? 0,
+        take: limit,
+        skip: offset,
       });
 
       await this.redisService.set('users', JSON.stringify(users));
@@ -57,11 +57,4 @@ export class AppService {
     }
   }
 
-  async saveLog(message: string, level: string): Promise<void> {
-    try {
-      await this.prisma.log.create({ data: { level, message } });
-    } catch (e) {
-      throw new RpcException(e.message || 'Error saving log');
-    }
-  }
 }

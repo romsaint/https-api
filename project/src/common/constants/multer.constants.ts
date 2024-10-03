@@ -4,7 +4,7 @@ import * as uuid from 'uuid'
 
 
 export const multerOpt = {
-    limits: { fileSize: 1024 * 1024 },
+    // limits: { fileSize: 1024 * 1024 },
     fileFilter(req, file, callback) {
         const accessExt = ['.jpeg', '.jpg', '.png']
 

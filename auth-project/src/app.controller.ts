@@ -1,5 +1,5 @@
 import { Controller, Get, HttpException, HttpStatus, Post, Query, Req, UploadedFile, UseGuards } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './services/app.service';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { EventPattern, MessagePattern, RpcException, Transport } from '@nestjs/microservices';
 import { Request } from 'express';
@@ -23,11 +23,6 @@ export class AppController {
   @MessagePattern({cmd: 'VERIFY_EMAIL'}, Transport.TCP)
   async verifyEmail({ip, token}) {
     return await this.appService.verifyEmail(ip, token)
-  }
-
-  @EventPattern({cmd: "SEND_EMAIL"}, Transport.TCP)
-  async sendMail(ip) {
-    await this.appService.sendEmail(ip)
   }
 
   @MessagePattern({cmd: "CREATE_OAUTH_USER"}, Transport.TCP)

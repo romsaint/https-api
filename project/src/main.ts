@@ -21,10 +21,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   app.enableCors()
 
-  const errorLlog = app.get(ErrorLogService)
-
+  const errorLog = app.get(ErrorLogService)
   // app.useLogger(['error'])
-  app.useGlobalFilters(new AllExceptionsFilter(errorLlog))
+  app.useGlobalFilters(new AllExceptionsFilter(errorLog))
 
   await app.listen(5000, '127.0.0.1');
 }

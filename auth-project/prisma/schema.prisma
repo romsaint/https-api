@@ -20,7 +20,7 @@ enum UserRoles {
   PAID_USER
 }
 
-model User {
+model Users {
   username  String
   password  String
   id  String  @default(uuid()) @unique
@@ -34,15 +34,24 @@ model User {
 }
 
 
-model Log {
+model Logs {
   id        Int      @id @default(autoincrement())
   level     String
   message   String
   timestamp DateTime @default(now())
+  url   String
 }
 
 model Tokens {
   id    Int   @id   @default(autoincrement())
   ip    String  @unique // IP type
   jwt_token   String
+}
+
+model Health {
+  id    Int @id   @default(autoincrement())
+  status    String
+  created_at  DateTime  @default(now())
+  error   String?
+  url   String
 }

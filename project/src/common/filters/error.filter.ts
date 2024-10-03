@@ -24,7 +24,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         : 'Internal server error';
 
     // Сохраняем ошибку в базу данных
-    await this.logService.createLog('error', message);
+    await this.logService.createLog('error', message, request.url, );
 
     response.status(status).json({
       statusCode: status,

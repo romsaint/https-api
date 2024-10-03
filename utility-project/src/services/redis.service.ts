@@ -1,4 +1,4 @@
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Redis } from 'ioredis';
 
@@ -7,9 +7,9 @@ export class RedisLockService {
   constructor(
     @InjectRedis() private readonly redisClient: Redis
   ) {}
-
+  
   async acquireLock(key: string, ttl: number): Promise<boolean> {
-    const result = await this.redisClient.set(key, 'locked', 'EX', ttl,'NX', );
+    const result = await this.redisClient.set(key, 'locked', 'EX', ttl, 'NX');
 
     return result === 'OK';
   }

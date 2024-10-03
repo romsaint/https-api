@@ -3,7 +3,8 @@ config()
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
-
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       },
       defaults: {
         from: `"Nest https-api project" <${process.env.MAIL_USER}>`, // Убедитесь, что этот адрес совпадает с адресом аутентификации
-      },
+      }
     }),
   ],
   providers: [MailService]

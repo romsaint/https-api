@@ -7,8 +7,8 @@ import { ClientProxy } from '@nestjs/microservices';
 export class ErrorLogService implements LoggerService {
     constructor(@Inject('USER_SERVICE') private readonly client: ClientProxy) { }
 
-    createLog(level: LogLevel, message): void {
-        this.client.emit({ cmd: "SAVE_LOG" }, { level, message })
+    createLog(level: LogLevel, message, url): void {
+        this.client.emit({ cmd: "SAVE_LOG" }, { level, message, url })
     }
 
     debug(message: any, ...optionalParams: any[]): void {
