@@ -1,7 +1,7 @@
-import { UserDto } from "src/dto/user.dto";
+import { UserDto } from "common-lib-nestjs-https-api/dist";
 import {faker} from '@faker-js/faker'
 import * as uuid from 'uuid'
-import { UserRoles } from "@prisma/client";
+import { UserRoles } from "common-lib-nestjs-https-api/dist";
 import * as CryptoJS from 'crypto-js'
 
 const usedEmails = new Set<string>();

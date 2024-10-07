@@ -17,14 +17,15 @@ export class JwtGuard implements CanActivate {
             throw new UnauthorizedException();
         }
 
-        const token = req.headers.authorization.split(' ')[1]; // Предположим, что токен передается в формате "Bearer <token>"
-        const user = this.jwtService.verify(token, {secret: this.config.get('SECRET_KEY')}); // Метод для валидации токена и получения информации о пользователе
+        const token = req.headers.authorization.split(' ')[1]; 
+        const user = this.jwtService.verify(token, {secret: this.config.get('SECRET_KEY')}); 
         
         if (!user) {
             throw new UnauthorizedException();
         }
 
         req.user = user; // Добавляем информацию о пользователе в запрос
+        
         return true;
     }
 }

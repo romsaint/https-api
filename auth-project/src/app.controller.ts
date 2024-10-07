@@ -1,10 +1,7 @@
-import { Controller, Get, HttpException, HttpStatus, Post, Query, Req, UploadedFile, UseGuards } from '@nestjs/common';
+import { Controller} from '@nestjs/common';
 import { AppService } from './services/app.service';
-import { UserCreateDto } from './dto/userCreate.dto';
-import { EventPattern, MessagePattern, RpcException, Transport } from '@nestjs/microservices';
-import { Request } from 'express';
-import { IPVersion } from 'net';
-import { AuthGuard } from '@nestjs/passport';
+import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
+import { MessagePattern, Transport } from '@nestjs/microservices';
 
 @Controller('auth')
 export class AppController {

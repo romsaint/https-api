@@ -1,40 +1,38 @@
-import { Injectable } from "@nestjs/common";
-import { UserRoles } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { UserRoles } from "../interface/userRoles";
 import { IsDate, IsEmail, IsNotEmpty, IsUUID } from "class-validator";
 
 export class UserDto {
     @IsNotEmpty()
-    username: string
+    username!: string
 
     @IsNotEmpty()
     @IsEmail()
-    email: string
+    email!: string
 
     @IsNotEmpty()
     //@IsStrongPassword()
-    password: string
+    password!: string
 
     @IsNotEmpty()
     @IsUUID()
-    id: string
+    id!: string
 
     @IsNotEmpty()
-    role: UserRoles
+    role!: UserRoles
 
     @IsNotEmpty()
-    social_rating: number | Decimal
+    social_rating!: number
 
     @IsNotEmpty()
-    salt: string
+    salt!: string
 
-    profile_image: string
+    profile_image!: string
 
     @IsNotEmpty()
     @IsDate()
-    created_at: Date
+    created_at!: Date
     
     @IsNotEmpty()
     @IsDate()
-    updated_at: Date
+    updated_at!: Date
 }

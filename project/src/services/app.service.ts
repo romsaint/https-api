@@ -1,11 +1,7 @@
-import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { UserCreateDto } from '../dto/userCreate.dto';
-import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
+import { Injectable} from '@nestjs/common';
+import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
+import { Observable} from 'rxjs';
 import { IReturnUser } from '../common/interface/returnUser.interface';
-import axios from 'axios'
-import * as fs from 'fs'
-import * as https from 'https';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { UtilityService } from './utility.service';

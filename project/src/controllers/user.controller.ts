@@ -1,7 +1,7 @@
 import { Controller, DefaultValuePipe, Get, Ip, ParseIntPipe, Query, UseGuards } from "@nestjs/common";
 import { AppService } from "src/services/app.service";
 import { RolesReflector } from "src/common/roles.reflector";
-import { UserRoles } from "src/common/userRoles";
+import { UserRoles } from "common-lib-nestjs-https-api/dist";
 import { RolesGuard } from "src/guards/roles.guard";
 import { JwtGuard } from "src/guards/verify.guard";
 

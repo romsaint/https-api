@@ -1,8 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { UserCreateDto } from "src/dto/userCreate.dto";
+// import { UserCreateDto } from "src/dto/userCreate.dto";
 import { AuthService } from "./auth.service";
 import { EmailService } from "./email.service";
 import { IReturnUser } from "src/common/interface/returnUser.interface";
+import {UserCreateDto} from 'common-lib-nestjs-https-api/dist/index'
+
+
 
 @Injectable()
 export class AppService {

@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { UserCreateDto } from '../dto/userCreate.dto';
+import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
 import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
 import { IReturnUser } from '../common/interface/returnUser.interface';
 

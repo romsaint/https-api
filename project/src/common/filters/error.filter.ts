@@ -1,10 +1,10 @@
 import { Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import { ErrorLogService } from 'src/log/log.service';
+import { LogService } from 'src/log/log.service';
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
-  constructor(private readonly logService: ErrorLogService) {
+  constructor(private readonly logService: LogService) {
     super();
   }
   

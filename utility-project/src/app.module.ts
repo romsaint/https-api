@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './controllers/app.controller';
 import { AppService } from './services/app.service';
-import { RedisModule, RedisService } from '@liaoliaots/nestjs-redis';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from 'prisma/prisma.service';
 import { HealthService } from './services/health.service';
 import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
-import { HealthCheckService, HttpHealthIndicator, TerminusModule } from '@nestjs/terminus';
-import { HealthCheckExecutor } from '@nestjs/terminus/dist/health-check/health-check-executor.service';
+import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
-import { Agent } from 'http';
+
 
 @Module({
   imports: [RedisModule.forRoot({
@@ -37,4 +36,5 @@ import { Agent } from 'http';
   controllers: [AppController],
   providers: [AppService, PrismaService, MailService, HealthService],
 })
+
 export class AppModule {}

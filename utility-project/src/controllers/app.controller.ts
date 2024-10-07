@@ -25,4 +25,5 @@ export class AppController {
   async testHealthPerHour() {
     await this.healthService.everyHourHealthTest()
   }
+
 }

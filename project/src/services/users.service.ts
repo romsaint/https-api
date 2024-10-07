@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { Observable, catchError, firstValueFrom } from 'rxjs';
 import { IReturnUser } from '../common/interface/returnUser.interface';
 

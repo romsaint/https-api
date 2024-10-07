@@ -39,6 +39,7 @@
     "bull": "^4.16.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "common-lib-nestjs-https-api": "^1.0.2",
     "create-react-app": "^5.0.1",
     "dotenv": "^16.4.5",
     "handlebars": "^4.7.8",

@@ -1,10 +1,8 @@
 import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Ip, Param, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from '../services/app.service';
-import { UserCreateDto } from '../dto/userCreate.dto';
-import { JwtGuard } from '../guards/verify.guard';
-import { RolesGuard } from '../guards/roles.guard';
+import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
 import { RolesReflector } from '../common/roles.reflector';
-import { UserRoles } from '../common/userRoles';
+import { UserRoles } from 'common-lib-nestjs-https-api/dist';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { AuthGuard } from '@nestjs/passport';

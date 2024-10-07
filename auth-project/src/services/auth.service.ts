@@ -1,8 +1,7 @@
 import { BadRequestException, HttpException, Inject, Injectable } from '@nestjs/common';
-import { UserCreateDto } from '../dto/userCreate.dto';
 import { PrismaService } from 'prisma/prisma.service';
-import { UserDto } from '../dto/user.dto';
-import { UserRoles } from '@prisma/client';
+import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
+import { UserRoles } from 'common-lib-nestjs-https-api/dist';
 import { JwtService } from '@nestjs/jwt';
 import * as CryptoJS from 'crypto-js'
 import bcryptjs from 'bcryptjs'
@@ -66,6 +65,7 @@ export class AuthService {
 
 
   async login(userDto: Omit<UserCreateDto, 'username'>): Promise<{ userWithoutPassword: IReturnUser, token: string }> {
+    console.log(userDto)
     try {
       const isUserExists = await this.prisma.users.findFirst({ where: { email: userDto.email } });
 

@@ -1,0 +1,20 @@
+{
+  "name": "common-lib-nestjs-https-api",
+  "version": "1.0.2",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "yarn build"
+  },
+  "files": [
+    "dist",
+    "src/common"
+  ],
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "typescript": "^5.6.2",
+    "validator": "^13.12.0"
+  }
+}

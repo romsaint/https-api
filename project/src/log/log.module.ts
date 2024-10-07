@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ErrorLogService } from './log.service';
+import { LogService } from './log.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -14,6 +14,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]
   })],
-  providers: [ErrorLogService]
+  providers: [LogService]
 })
 export class LogModule {}

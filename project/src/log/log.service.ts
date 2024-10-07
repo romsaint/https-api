@@ -4,7 +4,7 @@ import { ClientProxy } from '@nestjs/microservices';
 
 
 @Injectable()
-export class ErrorLogService implements LoggerService {
+export class LogService implements LoggerService {
     constructor(@Inject('USER_SERVICE') private readonly client: ClientProxy) { }
 
     createLog(level: LogLevel, message, url): void {

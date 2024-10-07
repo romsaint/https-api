@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { generateUser } from '../common/utils/userGenerate';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
-import { UserDto } from '../dto/user.dto';
+import { UserDto } from 'common-lib-nestjs-https-api/dist';
 import { IReturnUser } from '../common/interface/returnUser.interface';
 import { RpcException } from '@nestjs/microservices';
 

@@ -1,10 +1,6 @@
-import { Controller, Get, Ip, Param, UseGuards } from "@nestjs/common";
+import { Controller, Get, Ip} from "@nestjs/common";
 import { Cron } from "@nestjs/schedule";
 import { AppService } from "src/services/app.service";
-import { RolesReflector } from "src/common/roles.reflector";
-import { UserRoles } from "src/common/userRoles";
-import { RolesGuard } from "src/guards/roles.guard";
-import { JwtGuard } from "src/guards/verify.guard";
 
 @Controller()
 export class UtitlityController {
@@ -12,7 +8,7 @@ export class UtitlityController {
         private readonly appService: AppService
     ) {}
     @Get('send-email')
-    async sendEmail(@Ip() ip) {
+    async sendEmail(@Ip() ip: string) {
       await this.appService.sendEmail(ip)
     }
   
