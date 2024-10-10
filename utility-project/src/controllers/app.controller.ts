@@ -2,13 +2,15 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from '../services/app.service';
 import { EventPattern, MessagePattern, Transport } from '@nestjs/microservices';
 import { HealthService } from 'src/services/health.service';
-import { HealthCheck } from '@nestjs/terminus';
+import { LogService } from 'src/services/log.service';
+
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly healthService: HealthService
+    private readonly healthService: HealthService,
+    private readonly logService: LogService
   ) {}
 
   @MessagePattern({cmd: "SEND_EMAIL"}, Transport.TCP)
@@ -25,5 +27,9 @@ export class AppController {
   async testHealthPerHour() {
     await this.healthService.everyHourHealthTest()
   }
-
+  
+  @EventPattern({cmd: "SAVE_LOG"}, Transport.TCP)
+  async saveLog({level, url, message}) {
+    await this.logService.saveLog(message, level, url)  
+  }
 }

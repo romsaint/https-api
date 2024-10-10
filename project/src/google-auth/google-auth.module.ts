@@ -6,7 +6,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthService } from 'src/services/auth.service';
 import { UsersService } from 'src/services/users.service';
 import { UtilityService } from 'src/services/utility.service';
-import { ScrapService } from 'src/services/scrap.service';
 
 @Module({
   imports: [
@@ -38,7 +37,7 @@ import { ScrapService } from 'src/services/scrap.service';
     }),
     ConfigModule.forRoot()
   ],
-  providers: [GoogleServiceStrategy, AppService, ConfigService, AuthService, UsersService, UtilityService, ScrapService]
+  providers: [GoogleServiceStrategy, AppService, ConfigService, AuthService, UsersService, UtilityService]
 })
 
 export class GoogleAuthModule { }

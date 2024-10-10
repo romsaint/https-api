@@ -9,9 +9,14 @@ export class RedisLockService {
   ) {}
   
   async acquireLock(key: string, ttl: number): Promise<boolean> {
-    const result = await this.redisClient.set(key, 'locked', 'EX', ttl, 'NX');
+    try{
 
-    return result === 'OK';
+      const result = await this.redisClient.set(key, 'locked', 'EX', ttl, 'NX');
+
+      return result === 'OK';
+    }catch(e) {
+      console.log(e)
+    }
   }
 
   async releaseLock(key: string): Promise<void> {

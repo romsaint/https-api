@@ -23,6 +23,9 @@ import { HealthCotroller } from './controllers/health.controller';
 import { AuthService } from './services/auth.service';
 import { UtilityService } from './services/utility.service';
 import { UsersService } from './services/users.service';
+import { ApiKeyService } from './api-key/api-key.service';
+import { ApiKeyAuthStrategy } from './api-key/api-key.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 
 @Module({
@@ -81,10 +84,20 @@ import { UsersService } from './services/users.service';
       httpsAgent: new (require('https').Agent)({
         rejectUnauthorized: false,
       }),
-    })
+    }),
+    PassportModule
   ],
   controllers: [AuthController, UserController, UtitlityController, HealthCotroller],
-  providers: [AppService, JwtService, LogService, AppClusterService, AuthService, UtilityService, UsersService],
+  providers: [
+    AppService, 
+    JwtService, 
+    LogService, 
+    AppClusterService, 
+    AuthService, 
+    UtilityService, 
+    UsersService, 
+    ApiKeyService,
+    ApiKeyAuthStrategy],
 })
 
 export class AppModule { }

@@ -5,7 +5,7 @@ import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class LogService implements LoggerService {
-    constructor(@Inject('USER_SERVICE') private readonly client: ClientProxy) { }
+    constructor(@Inject('UTILITY_SERVICE') private readonly client: ClientProxy) { }
 
     createLog(level: LogLevel, message, url): void {
         this.client.emit({ cmd: "SAVE_LOG" }, { level, message, url })

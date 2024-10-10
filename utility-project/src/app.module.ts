@@ -10,6 +10,10 @@ import { MailModule } from './mail/mail.module';
 import { MailService } from './mail/mail.service';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
+import { ExcelService } from './excel/excel.service';
+import { LogService } from './services/log.service';
+import { RedisLockService } from './services/redis.service';
+import { ApiKeyService } from './common/api-key/api-key.service';
 
 
 @Module({
@@ -34,7 +38,7 @@ import { HttpModule } from '@nestjs/axios';
   }),
 ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, MailService, HealthService],
+  providers: [AppService, PrismaService, MailService, HealthService, ExcelService, LogService, RedisLockService, ApiKeyService],
 })
 
 export class AppModule {}

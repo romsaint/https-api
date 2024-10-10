@@ -6,12 +6,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [ClientsModule.register({
     clients: [
       {
-        name: "USER_SERVICE",
+        name: "UTILITY_SERVICE",
         transport: Transport.TCP,
         options: {
-          port: 3002
+          port: 3003
         }
-      },
+      }
     ]
   })],
   providers: [LogService]
