@@ -13,14 +13,10 @@ export class UtilityService {
 
     async sendEmail(ip) {
         if (ip) {
-            await this.utilityService.send({ cmd: "SEND_EMAIL" }, ip).pipe(catchError(err => {
+            await this.utilityService.emit({ cmd: "SEND_EMAIL" }, ip).pipe(catchError(err => {
                 throw new HttpException(err.message, 500)
             }))
-
-            return
         }
-
-        throw new UnauthorizedException()
     }
 
     async everyHourHealthTest() {
@@ -42,11 +38,12 @@ export class UtilityService {
                 key: fs.readFileSync('./src/secrets/key.pem'),
                 rejectUnauthorized: false,
             });
-
+            
             await axios.get('https://127.0.0.1:5000/utility/send-email', {
                 httpsAgent: httpsAgent,
             });
         } catch (e) {
+            console.log(e.message)
             throw new Error(e)
         }
     }

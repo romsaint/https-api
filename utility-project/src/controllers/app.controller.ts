@@ -13,10 +13,11 @@ export class AppController {
     private readonly logService: LogService
   ) {}
 
-  @MessagePattern({cmd: "SEND_EMAIL"}, Transport.TCP)
+  @EventPattern({ cmd: "SEND_EMAIL" }, Transport.TCP)
   async sendMail(ip) {
     return await this.appService.sendEmail(ip)
   }
+
 
   @MessagePattern({cmd: 'HEALTH_CHECK'})
   check(path) {

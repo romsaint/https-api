@@ -25,12 +25,13 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 
     // Сохраняем ошибку в базу данных
     await this.logService.createLog('error', message, request.url, );
-
-    response.status(status).json({
+    const res = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
-    });
+    }
+    console.log(res)
+    response.status(status).json(res);
   }
 }

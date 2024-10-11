@@ -13,7 +13,6 @@ import { HttpModule } from '@nestjs/axios';
 import { ExcelService } from './excel/excel.service';
 import { LogService } from './services/log.service';
 import { RedisLockService } from './services/redis.service';
-import { ApiKeyService } from './common/api-key/api-key.service';
 
 
 @Module({
@@ -38,7 +37,7 @@ import { ApiKeyService } from './common/api-key/api-key.service';
   }),
 ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, MailService, HealthService, ExcelService, LogService, RedisLockService, ApiKeyService],
+  providers: [AppService, PrismaService, MailService, HealthService, ExcelService, LogService, RedisLockService],
 })
 
 export class AppModule {}

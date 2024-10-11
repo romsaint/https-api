@@ -45,7 +45,7 @@ export class AppService {
   async sendEmail(ip: string) {
     return this.utilityService.sendEmail(ip)
   }
-
+  
   async everyHourHealthTest() {
     return this.utilityService.everyHourHealthTest()
   }

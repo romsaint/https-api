@@ -4,14 +4,13 @@ import { htmlNotification } from '../common/utility/htmlNotification';
 import { PrismaService } from 'prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { MailService } from 'src/mail/mail.service';
 
 
 @Injectable()
 export class AppService {
     constructor(
-        @InjectRedis() private readonly redisLockService: RedisLockService,
+        private readonly redisLockService: RedisLockService,
         private readonly prisma: PrismaService,
         private readonly emailService: MailService,
         private readonly jwt: JwtService,
@@ -29,7 +28,7 @@ export class AppService {
 
         try {
             const tokens = await this.prisma.tokens.findFirst({ where: { ip } });
-
+         
             if (tokens) {
                 const { iat, exp, ...data } = this.jwt.verify(tokens.jwt_token, { secret: this.config.get('SECRET_KEY') });
                 const htmlContent = htmlNotification(data)

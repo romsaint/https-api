@@ -21,7 +21,7 @@ async function bootstrap() {
 
   const logger = app.get(LogService)
 
-  // app.useLogger(['error', 'debug'])
+  //app.useLogger(['error', 'debug'])
 
   app.useGlobalFilters(new AllExceptionsFilter(logger))
 

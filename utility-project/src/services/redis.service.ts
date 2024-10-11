@@ -18,7 +18,7 @@ export class RedisLockService {
       console.log(e)
     }
   }
-
+  
   async releaseLock(key: string): Promise<void> {
     await this.redisClient.del(key);
   }

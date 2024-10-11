@@ -18,7 +18,7 @@ import { join } from 'path';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { UserController } from './controllers/user.controller';
-import { UtitlityController } from './controllers/utility.controller';
+import { UtilityController } from './controllers/utility.controller';
 import { HealthCotroller } from './controllers/health.controller';
 import { AuthService } from './services/auth.service';
 import { UtilityService } from './services/utility.service';
@@ -87,7 +87,7 @@ import { PassportModule } from '@nestjs/passport';
     }),
     PassportModule
   ],
-  controllers: [AuthController, UserController, UtitlityController, HealthCotroller],
+  controllers: [AuthController, UserController, UtilityController, HealthCotroller],
   providers: [
     AppService, 
     JwtService, 
