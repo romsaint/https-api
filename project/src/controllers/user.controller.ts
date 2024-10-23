@@ -7,17 +7,23 @@ import { JwtGuard } from "src/guards/verify.guard";
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Observable } from "rxjs";
 import { AuthGuard } from "@nestjs/passport";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { AllUsersCommands } from "src/queries/user/allUsers/allUsers.commands";
+import { GenerateUserCommand } from "src/commands/user/generateUser/generateUser.commands";
 
 @ApiTags('User')
 @RolesReflector(UserRoles.ADMIN)
 @Controller('user')
 export class UserController {
-  constructor(private readonly appService: AppService) { }
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus
+  ) { }
 
   @Get('all-users')
-  @RolesReflector(UserRoles.MODERATOR)
-  @UseGuards(JwtGuard, RolesGuard)
-  @UseGuards(AuthGuard('api-key'))
+  // @RolesReflector(UserRoles.MODERATOR)
+  // @UseGuards(JwtGuard, RolesGuard)
+  // @UseGuards(AuthGuard('api-key'))
   
   @ApiBearerAuth('jwt')
   @ApiOperation({ summary: 'Get all users' })
@@ -28,11 +34,11 @@ export class UserController {
     @Query('limit', new DefaultValuePipe(99999999), ParseIntPipe) limit,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset) {
 
-    return this.appService.allUsers(limit, offset)
+    return this.queryBus.execute(new AllUsersCommands(limit, offset))
   }
 
   @Get('generate-user')
-  @UseGuards(RolesGuard, JwtGuard)
+  @UseGuards(JwtGuard, RolesGuard)
   @UseGuards(AuthGuard('api-key'))
 
   @ApiBearerAuth('jwt')
@@ -40,6 +46,6 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Users generated successfully' })
   @ApiQuery({ name: 'count', description: 'Number of users to generate', required: true, type: Number })
   async generateUser(@Query('count') count: number): Promise<Observable<{ msg: string }>> {
-    return await this.appService.generateUser(count)
+    return await this.commandBus.execute(new GenerateUserCommand(count))
   }
 }

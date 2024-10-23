@@ -9,7 +9,7 @@ export class RolesGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const req = context.switchToHttp().getRequest()
         const rolesAccess = this.reflector.getAllAndMerge(RolesReflector, [context.getHandler(), context.getClass()])
-      
+
         if(!rolesAccess.includes(req.user?.role)) {
             throw new ForbiddenException()
         }
