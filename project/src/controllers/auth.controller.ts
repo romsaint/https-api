@@ -6,13 +6,18 @@ import { UserRoles } from 'common-lib-nestjs-https-api/dist';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-
+import { QueryBus, CommandBus } from '@nestjs/cqrs';
+import { RegistrationCommand } from 'src/commands/auth/registration/registration.commands';
+import { LoginCommand } from 'src/commands/auth/login/login.commands';
+import { VerifyEmailCommand } from 'src/commands/auth/verifyEmail/verifyEmail.command';
 
 @ApiTags('Auth')
 @Controller('auth')
 @RolesReflector(UserRoles.ADMIN)
 export class AuthController {
-  constructor(private readonly appService: AppService) { }
+  constructor(
+    private readonly commandBus: CommandBus
+  ) { }
 
   @Post('registration')
   @UseInterceptors(FileInterceptor('avatar'))
@@ -22,8 +27,8 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiBody({type: UserCreateDto})
   @ApiConsumes('multipart/form-data') // because file upload
-  async registration(@Body() userDto: UserCreateDto, @UploadedFile() profile_image) {
-    return await this.appService.registration(userDto, profile_image);
+  async registration(@Body() userDto: UserCreateDto, @UploadedFile() profileImage) {
+    return this.commandBus.execute(new RegistrationCommand(userDto, profileImage))
   }
 
 
@@ -34,18 +39,17 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiBody({ type: UserCreateDto })
   async login(@Body() userDto: Omit<UserCreateDto, 'username'>) {
-    return this.appService.login(userDto)
+    return this.commandBus.execute(new LoginCommand(userDto))
   }
 
   @Get('verify-email/:uuid')
-
   @ApiOperation({ summary: 'Verify user email' })
   @ApiResponse({ status: 200, description: 'Email verified successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiParam({ name: 'uuid', description: 'User UUID' })
   @ApiQuery({ name: 'token', description: 'Verification token' })
-  async verifyEmail(@Ip() ip, @Query('token') token: string) {
-    return this.appService.verifyEmail(ip, token)
+  async verifyEmail(@Ip() ip: string, @Query('token') token: string) {
+    return this.commandBus.execute(new VerifyEmailCommand(ip, token))
   }
 
   @Get('oauth')
@@ -55,6 +59,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'OAuth initiated' })
   async googleOAuth(@Req() req) {}
 
+  
   @Get('oauth/redirect')
   @UseGuards(AuthGuard('google'))
 

@@ -26,4 +26,8 @@ export class UsersService {
       throw new HttpException(e.message || "All users error", HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
+
+  async getUser() {
+    
+  }
 }

@@ -17,8 +17,13 @@ export class UserService {
   async generateUsers(count: number): Promise<{ msg: string }> {
     try {
       for (let i = 0; i < count; i++) {
-        const user = generateUser();
-        await this.prisma.users.create({ data: user });
+        await this.prisma.$transaction(async () => {
+          const user = generateUser();
+          const existsUsers = JSON.parse(await this.redisService.get('users'))
+  
+          this.redisService.set('users', JSON.stringify(existsUsers.concat(user)))
+          await this.prisma.users.create({ data: user });
+        })
       }
       return { msg: 'Created' };
     } catch (e) {
@@ -28,11 +33,25 @@ export class UserService {
 
   async allUsers(limit: number, offset: number): Promise<IReturnUser[]> {
     try {
-      const redisUsers = await this.redisService.get('users');
+      const redisUsers = await this.redisService.get(`users`);
 
       if (redisUsers) {
-        return JSON.parse(redisUsers);
+        return JSON.parse(redisUsers).slice(offset, offset + limit);
       }
+      const usersToRedis = await this.prisma.users.findMany({
+        select: {
+          created_at: true,
+          email: true,
+          id: true,
+          role: true,
+          social_rating: true,
+          updated_at: true,
+          username: true,
+          profile_image: true,
+        }
+    });
+
+      await this.redisService.set('users', JSON.stringify(usersToRedis))
 
       const users = await this.prisma.users.findMany({
         select: {
@@ -48,9 +67,7 @@ export class UserService {
         take: limit,
         skip: offset,
       });
-
-      await this.redisService.set('users', JSON.stringify(users));
-      
+ 
       return users;
     } catch (e) {
       throw new RpcException(e.message || 'Error fetching users');

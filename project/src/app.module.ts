@@ -26,10 +26,20 @@ import { UsersService } from './services/users.service';
 import { ApiKeyService } from './api-key/api-key.service';
 import { ApiKeyAuthStrategy } from './api-key/api-key.strategy';
 import { PassportModule } from '@nestjs/passport';
-
+import { CqrsModule } from '@nestjs/cqrs';
+import { RegistrationHandler } from './commands/auth/registration/registration.handler';
+import { AllUsersHandler } from './queries/user/allUsers/allUser.query';
+import { GenerateUserHandler } from './commands/user/generateUser/generateUser.handler';
+import { LoginHandler } from './commands/auth/login/login.handler';
+import { HeathHandler } from './queries/health/healt.handler';
+import { CronHealthHandler } from './commands/health/cronHealth.handler';
+import { VerifyEmailHandler } from './commands/auth/verifyEmail/verifyEmail.handler';
+import { SendEmailHandler } from './commands/utility/sendEmail/sendEmail.handler';
+import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail.handler';
 
 @Module({
   imports: [
+    CqrsModule, 
     ClientsModule.register({
       clients: [
         {
@@ -97,7 +107,17 @@ import { PassportModule } from '@nestjs/passport';
     UtilityService, 
     UsersService, 
     ApiKeyService,
-    ApiKeyAuthStrategy],
+    ApiKeyAuthStrategy,
+    RegistrationHandler,
+    AllUsersHandler,
+    GenerateUserHandler,
+    LoginHandler,
+    HeathHandler,
+    CronHealthHandler,
+    VerifyEmailHandler,
+    SendEmailHandler,
+    CronSendEmailHandler
+  ],
 })
 
 export class AppModule { }

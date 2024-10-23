@@ -13,6 +13,8 @@ import { MailService } from '../mail/mail.service';
 import { generateHtmlContent } from '../common/constants/mail.constants';
 import { IReturnUser } from '../common/interface/returnUser.interface';
 import { faker } from '@faker-js/faker';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { Redis } from 'ioredis';
 
 @Injectable()
 export class AuthService {
