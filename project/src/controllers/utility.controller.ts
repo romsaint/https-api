@@ -1,10 +1,9 @@
 import { Controller, Get, Ip } from "@nestjs/common";
-import { CommandBus, QueryBus } from "@nestjs/cqrs";
-import { Cron, CronExpression } from "@nestjs/schedule";
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { CommandBus } from "@nestjs/cqrs";
+import { Cron } from "@nestjs/schedule";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CronSendEmailCommand } from "src/commands/utility/cronEmail/cronSendEmail.command";
 import { SendEmailCommand } from "src/commands/utility/sendEmail/sendEmail.command";
-import { AppService } from "src/services/app.service";
 
 @ApiTags('utility')
 @Controller('utility')
