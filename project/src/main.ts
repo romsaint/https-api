@@ -8,7 +8,7 @@ import { AppClusterService } from './cluster/cluster.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const httpsOptions = {
     key: fs.readFileSync('./src/secrets/key.pem'),
     cert: fs.readFileSync('./src/secrets/cert.pem')
@@ -28,7 +28,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('HTTPS api by wi3')
     .setDescription('Description of my api >')
-    .setVersion('2.0.1')
+    .setVersion('2.1.1')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

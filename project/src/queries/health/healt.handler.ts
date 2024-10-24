@@ -1,16 +1,16 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { HealthCommand } from "./health.command";
-import { AppService } from "src/services/app.service";
+import { UtilityService } from "src/services/utility.service";
 
 @QueryHandler(HealthCommand)
 export class HeathHandler implements IQueryHandler<HealthCommand> {
     constructor(
-        private readonly appService: AppService
+        private readonly utilityService: UtilityService
       ) { }
 
     async execute(query: HealthCommand): Promise<any> {
         const {path} = query
 
-        return this.appService.healthCheck(path)
+        return this.utilityService.healthCheck(path)
     }
 }

@@ -1,16 +1,16 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { SendEmailCommand } from "./sendEmail.command";
-import { AppService } from "src/services/app.service";
+import { UtilityService } from "src/services/utility.service";
 
 @CommandHandler(SendEmailCommand)
 export class SendEmailHandler implements ICommandHandler<SendEmailCommand> {
     constructor(    
-        private readonly appService: AppService
+        private readonly utilityService: UtilityService
     ) { }
 
     async execute(command: SendEmailCommand): Promise<any> {
         const {ip} = command
 
-        return this.appService.sendEmail(ip)
+        return this.utilityService.sendEmail(ip)
     }
 }

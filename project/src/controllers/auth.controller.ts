@@ -1,12 +1,11 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Ip, Param, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+import { Body, Controller, Get, Ip, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserCreateDto } from 'common-lib-nestjs-https-api/dist';
 import { RolesReflector } from '../common/roles.reflector';
 import { UserRoles } from 'common-lib-nestjs-https-api/dist';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { QueryBus, CommandBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { RegistrationCommand } from 'src/commands/auth/registration/registration.commands';
 import { LoginCommand } from 'src/commands/auth/login/login.commands';
 import { VerifyEmailCommand } from 'src/commands/auth/verifyEmail/verifyEmail.command';

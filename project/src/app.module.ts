@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './controllers/auth.controller';
-import { AppService } from './services/app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -99,7 +98,6 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
   ],
   controllers: [AuthController, UserController, UtilityController, HealthCotroller],
   providers: [
-    AppService, 
     JwtService, 
     LogService, 
     AppClusterService, 

@@ -1,14 +1,14 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CronSendEmailCommand } from "./cronSendEmail.command";
-import { AppService } from "src/services/app.service";
+import { UtilityService } from "src/services/utility.service";
 
 @CommandHandler(CronSendEmailCommand)
 export class CronSendEmailHandler implements ICommandHandler<CronSendEmailCommand> {
     constructor(    
-        private readonly appService: AppService
+        private readonly utilityService: UtilityService
     ) { }
 
     async execute(command: CronSendEmailCommand): Promise<any> {
-        return this.appService.sendEmailCron()
+        return this.utilityService.sendEmailCron()
     }
 }

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { GoogleServiceStrategy } from './google-auth.service';
-import { AppService } from 'src/services/app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthService } from 'src/services/auth.service';
@@ -37,7 +36,7 @@ import { UtilityService } from 'src/services/utility.service';
     }),
     ConfigModule.forRoot()
   ],
-  providers: [GoogleServiceStrategy, AppService, ConfigService, AuthService, UsersService, UtilityService]
+  providers: [GoogleServiceStrategy, ConfigService, AuthService, UsersService, UtilityService]
 })
 
 export class GoogleAuthModule { }
