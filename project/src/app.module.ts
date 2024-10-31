@@ -38,29 +38,35 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
 
 @Module({
   imports: [
-    CqrsModule, 
+    CqrsModule,
     ClientsModule.register({
       clients: [
         {
           name: "AUTH_SERVICE",
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            port: 3001
+            noAck: true,
+            queue: "auth-queue",
+            urls: ['amqp://localhost:5672']
           }
         },
 
         {
           name: "USER_SERVICE",
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            port: 3002
+            urls: ['amqp://localhost:5672'],
+            noAck: true,
+            queue: "users-queue"
           }
         },
         {
           name: "UTILITY_SERVICE",
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            port: 3003
+            noAck: true,
+            queue: "utility-queue",
+            urls: ['amqp://localhost:5672']
           }
         }
       ]
@@ -98,12 +104,12 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
   ],
   controllers: [AuthController, UserController, UtilityController, HealthCotroller],
   providers: [
-    JwtService, 
-    LogService, 
-    AppClusterService, 
-    AuthService, 
-    UtilityService, 
-    UsersService, 
+    JwtService,
+    LogService,
+    AppClusterService,
+    AuthService,
+    UtilityService,
+    UsersService,
     ApiKeyService,
     ApiKeyAuthStrategy,
     RegistrationHandler,

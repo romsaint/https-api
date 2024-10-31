@@ -7,22 +7,22 @@ import { MessagePattern, Transport } from '@nestjs/microservices';
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @MessagePattern({ cmd: "REG" }, Transport.TCP)
+  @MessagePattern({ cmd: "REG" }, Transport.RMQ)
   async registration({userDto, profile_image}) {
       return await this.appService.registration(userDto, profile_image)
   }  
 
-  @MessagePattern({ cmd: "LOGIN" }, Transport.TCP)
+  @MessagePattern({ cmd: "LOGIN" }, Transport.RMQ)
   async login(userDto: Omit<UserCreateDto, 'username'>) {
       return await this.appService.login(userDto);
   }
 
-  @MessagePattern({cmd: 'VERIFY_EMAIL'}, Transport.TCP)
+  @MessagePattern({cmd: 'VERIFY_EMAIL'}, Transport.RMQ)
   async verifyEmail({ip, token}) {
     return await this.appService.verifyEmail(ip, token)
   }
 
-  @MessagePattern({cmd: "CREATE_OAUTH_USER"}, Transport.TCP)
+  @MessagePattern({cmd: "CREATE_OAUTH_USER"}, Transport.RMQ)
   async createOAuthUser(profile) {
     return await this.appService.createOAuthUser(profile)
   }

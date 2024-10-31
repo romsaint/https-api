@@ -37,6 +37,8 @@
     "@prisma/client": "^5.19.1",
     "@types/bull": "^4.10.0",
     "@types/multer": "^1.4.12",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.4",
     "axios": "^1.7.7",
     "bull": "^4.16.3",
     "class-transformer": "^0.5.1",

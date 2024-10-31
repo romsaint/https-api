@@ -9,7 +9,7 @@ export class AllUsersHandler implements IQueryHandler<AllUsersCommands> {
     ) { }
     async execute(query: AllUsersCommands): Promise<any> {
         const {limit, offset} = query
-
+        
         return this.usersService.allUsers(limit, offset)
     }
 }

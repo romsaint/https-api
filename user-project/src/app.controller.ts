@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './services/user.service';
-import { EventPattern, MessagePattern, Transport } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload, Transport } from '@nestjs/microservices';
 
 @Controller('user')
 export class AppController {
@@ -8,13 +8,13 @@ export class AppController {
     private readonly userService: UserService
   ) {}
 
-  @MessagePattern({cmd: "GENERATE_USER"}, Transport.TCP)
-  async generaeteUser(count: number) {
+  @MessagePattern({cmd: "GENERATE_USER"}, Transport.RMQ)
+  async generaeteUser(@Payload() count: number) {
     return await this.userService.generateUsers(count)
   }
 
-  @MessagePattern({cmd: "ALL_USERS"}, Transport.TCP)
-  async allUsers(data: {limit: number, offset: number}) {
+  @MessagePattern({cmd: "ALL_USERS"}, Transport.RMQ)
+  async allUsers(@Payload() data: {limit: number, offset: number}) {
     return await this.userService.allUsers(data.limit, data.offset)
   }
 }

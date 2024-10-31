@@ -5,10 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: 'localhost',
-      port: 3003
+      noAck: true,
+      queue: "utility-queue",
+      urls: ['amqp://localhost:5672']
     }
   })
 
