@@ -18,8 +18,8 @@ import { RedisLockService } from './services/redis.service';
 @Module({
   imports: [RedisModule.forRoot({
     config: {
-      port: 6379,
-      host: "localhost"
+      host: process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.REDIS_HOST,
+      port: process.env.ENVIRONMENT == 'dev' ? 6379 : parseInt(process.env.REDIS_PORT)
     }
   }),
   JwtModule.register({}),

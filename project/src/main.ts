@@ -29,12 +29,16 @@ async function bootstrap(): Promise<void> {
     .setTitle('HTTPS api by wi3')
     .setDescription('Description of my api >')
     .setVersion('2.1.1')
+    .setBasePath('/')
+    .setContact('Rouse Bezotti', '', 'roma.ggg.20@list.ru')
+    .addBearerAuth()
+    .addOAuth2()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(5000, '127.0.0.1');
+  await app.listen(5000);
 }
 
 AppClusterService.clusterize(bootstrap)

@@ -36,6 +36,7 @@ import { VerifyEmailHandler } from './commands/auth/verifyEmail/verifyEmail.hand
 import { SendEmailHandler } from './commands/utility/sendEmail/sendEmail.handler';
 import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail.handler';
 
+
 @Module({
   imports: [
     CqrsModule,
@@ -44,10 +45,12 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
         {
           name: "AUTH_SERVICE",
           transport: Transport.RMQ,
+          
           options: {
             noAck: true,
             queue: "auth-queue",
-            urls: ['amqp://localhost:5672']
+            urls: [`amqp://${process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.RABBITMQ_HOST}:5672`],
+
           }
         },
 
@@ -55,7 +58,7 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
           name: "USER_SERVICE",
           transport: Transport.RMQ,
           options: {
-            urls: ['amqp://localhost:5672'],
+            urls: [`amqp://${process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.RABBITMQ_HOST}:5672`],
             noAck: true,
             queue: "users-queue"
           }
@@ -66,7 +69,7 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
           options: {
             noAck: true,
             queue: "utility-queue",
-            urls: ['amqp://localhost:5672']
+            urls: [`amqp://${process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.RABBITMQ_HOST}:5672`]
           }
         }
       ]
@@ -84,8 +87,8 @@ import { CronSendEmailHandler } from './commands/utility/cronEmail/cronSendEmail
     LogModule,
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
-        port: 6379
+        host: process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.REDIS_HOST,
+        port: process.env.ENVIRONMENT == 'dev' ? 6379 : parseInt(process.env.REDIS_PORT)
       }
     }),
     GoogleAuthModule,

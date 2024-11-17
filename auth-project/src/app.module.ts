@@ -24,8 +24,8 @@ import { AppService } from './services/app.service';
     MailModule,
     RedisModule.forRoot({
       config: {
-        host: 'localhost',
-        port: 6379
+        host: process.env.ENVIRONMENT == 'dev' ? 'localhost' : process.env.REDIS_HOST,
+        port: process.env.ENVIRONMENT == 'dev' ? 6379 : parseInt(process.env.REDIS_PORT)
       }
     })
   ],
